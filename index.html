@@ -489,7 +489,14 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
 function seed(){
   const s1=uid(),s2=uid(),s3=uid(),s4=uid();
   const today=new Date();const d=(x)=>{const t=new Date();t.setDate(t.getDate()-x);return t.toISOString().slice(0,10);};
-  
+    return {
+        students: [],
+        schedule: [],
+        lessons: [],
+        finance: [],
+        settings: { theme: "light" }
+    };
+}
 /* ---------- helpers ---------- */
 const baht=(n)=>"฿"+Math.round(n||0).toLocaleString("en-US");
 const num=(n)=>(Math.round((n||0)*100)/100).toLocaleString("en-US");
