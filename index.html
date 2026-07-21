@@ -400,6 +400,7 @@ tr:hover .row-actions{opacity:1}
         </g>
       </svg>
     </div>
+    <div><div class="lb-name">Thank You Tutor</div><div class="lb-sub">ระบบจัดการนักเรียน</div></div>
     </div>
     <div id="gateConnect">
       <h2>เชื่อมต่อระบบ</h2>
@@ -424,8 +425,12 @@ tr:hover .row-actions{opacity:1}
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="brand-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Z"/><path d="M7 10.5V15c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5v-4.5"/><path d="M21 8.5V14"/>
+        <svg viewBox="0 0 1536 1024" style="width: 24px; height: 24px;" preserveAspectRatio="xMidYMid meet">
+          <g transform="translate(0,1024) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
+            <path d="M5291 5395 c-42 -36 -56 -84 -38 -127 22 -52 52 -73 104 -73 38 0 49 5 74 33 51 56 32 149 -36 178 -48 20 -69 18 -104 -11z m107 -48 c4 -20 -25 -34 -40 -19 -15 15 -1 44 19 40 10 -2 19 -11 21 -21z"/>
+            <path d="M4557 5259 c-25 -15 -47 -63 -47 -105 0 -28 8 -44 34 -70 85 -85 214 -3 176 111 -20 61 -109 96 -163 64z m119 -68 c-10 -16 -36 -13 -43 5 -8 22 18 37 36 20 7 -8 10 -19 7 -25z"/>
+            <path d="M5122 5111 c-30 -53 -57 -71 -109 -71 -34 0 -50 7 -80 33 -42 37 -73 38 -73 3 0 -53 77 -105 155 -106 86 0 180 78 173 145 -5 48 -38 46 -66 -4z"/>
+          </g>
         </svg>
       </div>
       <div>
@@ -954,7 +959,7 @@ function renderFinance(c,A){
   }else{
     body=`<div class="card table-wrap"><table class="data"><thead><tr><th>นักเรียน</th><th>วิชา / คอร์ส</th><th>รูปแบบ</th><th style="text-align:right">ยอดเงิน</th><th style="text-align:right">คงเหลือ</th><th>สถานะ</th><th style="text-align:right">จัดการ</th></tr></thead><tbody>${list.map(f=>{const s=studentById(f.studentId);const out=outstanding(f);return `<tr>
       <td><div class="who"><div class="avatar" style="background:${avatarColor(f.studentId)};width:32px;height:32px;font-size:13px">${esc(initials(s?.name))}</div><div class="who-name" style="font-size:14px">${esc(s?.nickname||s?.name||"—")}</div></div></td>
-      <td><div style="font-weight:600;font-family:var(--font-display)">${esc(f.subject)}</div><div class="who-sub">${f.format?esc(f.format):""}${f.month?" · "+esc(f.month):""}${f.billing==="hour"?` · ${num(f.hours)} ชม. × ${baht(f.rate)}`:""}${f.note?" · "+esc(f.note):""}</div></td>
+      <td><div style="font-weight:600;font-family:var(--font-display)">${esc(f.subject)}</div><div class="who-sub">${f.format?esc(f.format):""}${f.month?" · "+esc(f.month):""}${f.billing==="hour"?` · ${num(f.hours)} ชม. × ${baht(f.rate)}`:""}${f.note?" · "+esc(f.note):""}${f.slipUrl?` <a href="${esc(f.slipUrl)}" target="_blank" style="color:var(--brand);margin-left:4px" title="ดูสลิปหลักฐาน"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></a>`:""}</div></td>
       <td><span class="tag">${BILLING[f.billing].label}</span></td>
       <td style="text-align:right"><span class="mono" style="font-weight:600">${baht(f.amount)}</span></td>
       <td style="text-align:right"><span class="mono" style="${out>0?'color:var(--unpaid);font-weight:600':'color:var(--faint)'}">${out>0?baht(out):"—"}</span></td>
@@ -986,10 +991,11 @@ function openFinance(id){
       <div class="field"><label>รูปแบบการเรียน</label><select id="f_format">${["เดี่ยว","กลุ่ม"].map(x=>`<option ${format===x?"selected":""}>${x}</option>`).join("")}</select></div>
     </div>
     <div class="field"><label>วิชา / คอร์สที่เรียน <span class="req">*</span></label><input id="f_sub" value="${esc(f?.subject||"")}" placeholder="เช่น ชีววิทยา ม.4"></div>
-    <div class="field"><label>รูปแบบการเก็บเงิน</label><div class="chipgroup" id="f_billing">${Object.entries(BILLING).map(([k,v])=>`<button type="button" class="chip-radio ${billing===k?"on":""}" data-bill="${k}">${v.label}<small>${v.desc}</small></button>`).join("")}</div></div>
+    <div class="field"><label>รูปแบบการเก็บเงิน</label><div class="chipgroup" id="f_billing">${Object.entries(BILLING).map(([k,v])=>`<button type="button" class="chip-radio ${billing===k?"on":""}" data-bill="${k}" style="padding:8px 14px;font-weight:600;">${v.label}</button>`).join("")}</div></div>
     <div id="billingFields"></div>
     <div class="field"><label>สถานะการชำระเงิน</label><div class="chipgroup" id="f_status">${Object.entries(STATUS).map(([k,v])=>`<button type="button" class="chip-radio ${status===k?"on":""}" data-st="${k}" style="flex-direction:row;padding:8px 14px"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--${k});margin-right:7px"></span>${v}</button>`).join("")}</div></div>
     <div class="field" id="depositWrap" style="display:none"><label>จำนวนเงินมัดจำ (บาท)</label><input type="number" id="f_deposit" min="0" value="${f?.deposit||0}"></div>
+    <div class="field" id="slipWrap" style="display:none"><label>แนบหลักฐานการโอน (สลิป)</label><input type="file" id="f_slip" accept="image/*"></div>
     <div class="field"><label>รายละเอียดเพิ่มเติม</label><input id="f_note" value="${esc(f?.note||"")}" placeholder="เช่น จำนวนคาบ หรือเงื่อนไขพิเศษ"></div>
   `;
   function billingHTML(m){
@@ -997,7 +1003,10 @@ function openFinance(id){
     if(billing==="month")return `<div class="grid-2"><div class="field"><label>เดือนที่เรียกเก็บ</label><input id="b_month" value="${esc(f?.month||"")}" placeholder="เช่น กรกฎาคม 2568"></div><div class="field"><label>ค่าเรียนต่อเดือน (บาท) <span class="req">*</span></label><input type="number" id="b_amount" min="0" value="${f?.billing==="month"?f.amount:""}" placeholder="0"></div></div>`;
     return `<div class="grid-2"><div class="field"><label>จำนวนชั่วโมง <span class="req">*</span></label><input type="number" id="b_hours" min="0" step="0.5" value="${f?.hours||""}" placeholder="0"></div><div class="field"><label>อัตราต่อชั่วโมง (บาท) <span class="req">*</span></label><input type="number" id="b_rate" min="0" value="${f?.rate||""}" placeholder="0"></div></div><div style="font-size:13px;color:var(--muted);margin-top:-4px">ยอดรวม: <b class="mono" id="hourTotal" style="color:var(--brand)">฿0</b></div>`;
   }
-  function updateDeposit(m){$("#depositWrap",m).style.display=status==="deposit"?"flex":"none";}
+  function updateDeposit(m){
+    $("#depositWrap",m).style.display=status==="deposit"?"flex":"none";
+    $("#slipWrap",m).style.display=(status==="paid"||status==="deposit")?"flex":"none";
+  }
   openModal({
     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>`,
     title:f?"แก้ไขรายรับ":"บันทึกรายรับใหม่",desc:"เลือกรูปแบบการเก็บเงินที่ตรงกับนักเรียนคนนี้",body,lg:true,saveLabel:f?"บันทึกการแก้ไข":"บันทึกข้อมูล",
@@ -1018,10 +1027,36 @@ function openFinance(id){
       else{const h=parseFloat($("#b_hours",m).value)||0,r=parseFloat($("#b_rate",m).value)||0;if(h<=0){toast("กรุณาระบุจำนวนชั่วโมงที่ถูกต้อง",false);return false;}if(r<=0){toast("กรุณาระบุอัตราต่อชั่วโมงที่ถูกต้อง",false);return false;}amount=h*r;extra.hours=h;extra.rate=r;}
       let deposit=0;
       if(status==="deposit"){deposit=parseFloat($("#f_deposit",m).value)||0;if(deposit<=0){toast("กรุณาระบุจำนวนเงินมัดจำ",false);return false;}if(deposit>amount){toast("เงินมัดจำต้องไม่มากกว่ายอดที่ต้องชำระ",false);return false;}}
-      const rec={id:f?f.id:uid(),studentId:sid,subject:sub,format:$("#f_format",m).value,billing,amount,status,deposit,note:$("#f_note",m).value.trim(),createdAt:f?f.createdAt:new Date().toISOString().slice(0,10),...extra};
-      if(f)Object.assign(f,rec);else DB.finance.push(rec);
-      enqueue("finance",f?"update":"create",rec.id,rec);
-      save();buildNav();render();toast(f?"บันทึกการแก้ไขแล้ว":"บันทึกรายรับแล้ว");return true;
+      
+      const rec={id:f?f.id:uid(),studentId:sid,subject:sub,format:$("#f_format",m).value,billing,amount,status,deposit,slipUrl:f?.slipUrl||"",note:$("#f_note",m).value.trim(),createdAt:f?f.createdAt:new Date().toISOString().slice(0,10),...extra};
+      
+      const slipInput = $("#f_slip", m);
+      const file = slipInput ? slipInput.files[0] : null;
+
+      const finishSave = (extraPayload = {}) => {
+        if(f)Object.assign(f,rec);else DB.finance.push(rec);
+        enqueue("finance",f?"update":"create",rec.id,rec, extraPayload);
+        save();buildNav();render();toast(f?"บันทึกการแก้ไขแล้ว":"บันทึกรายรับแล้ว");
+      };
+
+      if (file && (status === "paid" || status === "deposit")) {
+        $("#mSave", m).disabled = true;
+        $("#mSave", m).textContent = "กำลังอัปโหลด...";
+        const reader = new FileReader();
+        reader.onload = function() {
+          const base64File = reader.result;
+          const s = studentById(sid);
+          const sname = s ? s.nickname || s.name : "นักเรียน";
+          const fileName = `slip_${sname}_${rec.createdAt}.${file.name.split('.').pop()}`;
+          finishSave({ base64File, mimeType: file.type, fileName });
+          if(activeModal) activeModal.close();
+        };
+        reader.readAsDataURL(file);
+        return false; // Prevent auto-close while reading file
+      } else {
+        finishSave();
+        return true;
+      }
     }
   });
 }
@@ -1106,7 +1141,7 @@ function exportSection(k){
   let rows,name;
   if(k==="students"){return exportStudentsCSV();}
   if(k==="lessons"){rows=[["วันที่","นักเรียน","วิชา","หัวข้อ","ชั่วโมง","ความเข้าใจ","การบ้าน","หมายเหตุ"]];[...DB.lessons].sort((a,b)=>b.date.localeCompare(a.date)).forEach(l=>{const s=studentById(l.studentId);rows.push([l.date,s?.name,l.subject,l.topic,l.hours,l.understanding,l.homework,l.note]);});name="บันทึกการสอน";}
-  else if(k==="finance"){rows=[["นักเรียน","วิชา/คอร์ส","รูปแบบการเรียน","การเก็บเงิน","ยอดเงิน","สถานะ","มัดจำ","คงเหลือ","หมายเหตุ"]];DB.finance.forEach(f=>{const s=studentById(f.studentId);rows.push([s?.name,f.subject,f.format,BILLING[f.billing].label,f.amount,STATUS[f.status],f.deposit,outstanding(f),f.note]);});name="การเงิน";}
+  else if(k==="finance"){rows=[["นักเรียน","วิชา/คอร์ส","รูปแบบการเรียน","การเก็บเงิน","ยอดเงิน","สถานะ","มัดจำ","คงเหลือ","หลักฐานการโอน","หมายเหตุ"]];DB.finance.forEach(f=>{const s=studentById(f.studentId);rows.push([s?.name,f.subject,f.format,BILLING[f.billing].label,f.amount,STATUS[f.status],f.deposit,outstanding(f),f.slipUrl||"",f.note]);});name="การเงิน";}
   else{rows=[["นักเรียน","วัน","เวลาเริ่ม","เวลาสิ้นสุด","วิชา","ห้องเรียน"]];DB.schedule.forEach(b=>{const s=studentById(b.studentId);rows.push([s?.name,DAYS[b.day],b.start,b.end,b.subject,b.room]);});name="ตารางสอน";}
   if(download(`${name}-${new Date().toISOString().slice(0,10)}.csv`,toCSV(rows)))toast(`ส่งออก${name}แล้ว`);
 }
@@ -1138,18 +1173,18 @@ function scheduleToRow(b){const s=studentById(b.studentId);return [s?s.name:"",D
 function rowToSchedule(rid,row,idx){const d=DAYS.indexOf(row[1]);return {id:rid,studentId:idx(row[0]),day:d<0?0:d,start:row[2]||"",end:row[3]||"",subject:row[4]||"",room:row[5]||""};}
 function lessonToRow(l){const s=studentById(l.studentId);return [l.date||"",s?s.name:"",l.subject||"",l.topic||"",l.hours||0,l.understanding||"",l.homework||"",l.note||""];}
 function rowToLesson(rid,row,idx){return {id:rid,date:(row[0]||"").slice(0,10),studentId:idx(row[1]),subject:row[2]||"",topic:row[3]||"",hours:parseFloat(row[4])||0,understanding:row[5]||UNDERSTAND[1],homework:row[6]||"",note:row[7]||""};}
-function financeToRow(f){const s=studentById(f.studentId);return [s?s.name:"",f.subject||"",f.format||"",BILLING[f.billing]?BILLING[f.billing].label:f.billing,f.amount||0,STATUS[f.status]||f.status,f.deposit||0,f.createdAt||"",f.note||""];}
+function financeToRow(f){const s=studentById(f.studentId);return [s?s.name:"",f.subject||"",f.format||"",BILLING[f.billing]?BILLING[f.billing].label:f.billing,f.amount||0,STATUS[f.status]||f.status,f.deposit||0,f.createdAt||"",f.slipUrl||"",f.note||""];}
 function rowToFinance(rid,row,idx){
   let billing="course";for(const k in BILLING)if(BILLING[k].label===row[3])billing=k;
   let status="unpaid";for(const k in STATUS)if(STATUS[k]===row[5])status=k;
-  return {id:rid,studentId:idx(row[0]),subject:row[1]||"",format:row[2]||"เดี่ยว",billing,amount:parseFloat(row[4])||0,status,deposit:parseFloat(row[6])||0,createdAt:(row[7]||"").slice(0,10),note:row[8]||""};
+  return {id:rid,studentId:idx(row[0]),subject:row[1]||"",format:row[2]||"เดี่ยว",billing,amount:parseFloat(row[4])||0,status,deposit:parseFloat(row[6])||0,createdAt:(row[7]||"").slice(0,10),slipUrl:row[8]||"",note:row[9]||""};
 }
 const ROW_FN={students:studentToRow,schedule:scheduleToRow,lessons:lessonToRow,finance:financeToRow};
 
 /* ---- outbound queue: every local change is queued regardless of connection state,
    so anything created before cloud sync was ever configured gets pushed up on first login ---- */
-function enqueue(entity,op,rid,record){
-  syncQueue.push({entity,op,rid,row:record?ROW_FN[entity](record):null,ts:Date.now()});
+function enqueue(entity,op,rid,record,extraPayload={}){
+  syncQueue.push({entity,op,rid,row:record?ROW_FN[entity](record):null,ts:Date.now(),...extraPayload});
   saveQueue();updateSyncBadge();flushQueue();
 }
 async function flushQueue(){
